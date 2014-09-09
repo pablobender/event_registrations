@@ -11,7 +11,7 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20140506034546) do
+ActiveRecord::Schema.define(:version => 20140909220810) do
 
   create_table "attendances", :force => true do |t|
     t.integer  "event_id"
@@ -39,7 +39,6 @@ ActiveRecord::Schema.define(:version => 20140506034546) do
     t.string   "neighbourhood"
     t.string   "zipcode"
     t.string   "notes"
-    t.decimal  "registration_fee",      :default => -1.0,  :null => false
   end
 
   create_table "authentications", :force => true do |t|
@@ -79,9 +78,8 @@ ActiveRecord::Schema.define(:version => 20140506034546) do
     t.string   "title"
     t.datetime "start_at"
     t.datetime "end_at"
-    t.datetime "created_at",                :null => false
-    t.datetime "updated_at",                :null => false
-    t.integer  "limit",      :default => 0, :null => false
+    t.datetime "created_at", :null => false
+    t.datetime "updated_at", :null => false
   end
 
   create_table "registration_prices", :force => true do |t|
@@ -116,7 +114,7 @@ ActiveRecord::Schema.define(:version => 20140506034546) do
     t.string   "neighbourhood"
     t.string   "zipcode"
     t.integer  "roles_mask"
-    t.string   "default_locale", :default => "pt"
+    t.string   "default_locale", :default => "en"
     t.datetime "created_at",                       :null => false
     t.datetime "updated_at",                       :null => false
   end

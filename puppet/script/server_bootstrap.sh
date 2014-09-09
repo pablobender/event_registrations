@@ -22,8 +22,6 @@ fi
 
 
 su ${USER} <<EOF
-sudo apt-get update
-
 sudo apt-get install -y git-core ruby1.9 ruby1.9.1-dev \
                         rubygems1.9 irb1.9 ri1.9 rdoc1.9 \
                         build-essential libopenssl-ruby1.9.1 \

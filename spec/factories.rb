@@ -44,7 +44,7 @@ FactoryGirl.define do
     neighbourhood {|a| a.user.neighbourhood }
     zipcode {|a| a.user.zipcode }
 
-    registration_type { |a| a.event.registration_types.find_by_title('registration_type.individual') }
+    association :registration_type
     registration_date { |a| Time.zone.now }
   end
 

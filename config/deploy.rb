@@ -5,6 +5,7 @@ lock '3.1.0'
 set :stages, %w(vagrant staging production 10.11.12.14 162.243.247.114 162.243.94.207)
 set :default_stage, 'vagrant'
 
+set :branch, ENV["REVISION"] || ENV["BRANCH_NAME"] || 'master'
 set :rails_env,           'production'
 set :keep_releases,       5
 

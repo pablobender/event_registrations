@@ -1,11 +1,11 @@
 %p Olá #{h(@registration_group.contact_name)},
 
-%p A inscrição da empresa <strong>#{h(@registration_group.name)}</strong> no valor de #{number_to_currency(@registration_group.registration_fee, :locale => :pt)} na #{@event_name} foi confirmada. A inscrição inclui:
+%p A inscrição da empresa <strong>#{h(@registration_group.name)}</strong> no valor de #{number_to_currency(@registration_group.registration_fee, :locale => :en)} na #{@event_name} foi confirmada. A inscrição inclui:
 
 %ul
   - @registration_group.attendees.each do |attendee|
     %li
-      #{h(attendee.full_name)} no valor de #{number_to_currency(attendee.registration_fee, :locale => :pt)}
+      #{h(attendee.full_name)} no valor de #{number_to_currency(attendee.registration_fee, :locale => :en)}
 
 %p Qualquer dúvida, entre em contato através do email #{mail_to AppConfig[:organizer][:contact_email]}
 

@@ -153,9 +153,13 @@ pt:
         attendance:
           attributes:
             registration_type_id:
-              free_not_allowed: "Inscrição gratuita não está disponível."
+              member_not_allowed: "Inscrição de membros não está disponível."
+              speaker_not_allowed: "Inscrição de palestrante não está disponível."
+              volunteer_not_allowed: "Inscrição de voluntário não está disponível."
             email:
-              free_not_allowed: "Inscrições gratuitas só estão disponíveis para o email do palestrante."
+              member_not_allowed: "Inscrições de membros só estão disponíveis para emails cadastrados como membros da AWID."
+              speaker_not_allowed: "Inscrições de palestrante só estão disponíveis para emails cadastrados como palestrantes da AWID."
+              volunteer_not_allowed: "Inscrições de voluntário só estão disponíveis para emails cadastrados como voluntários da AWID."
 
   # Formtastic
   formtastic:
@@ -293,7 +297,7 @@ pt:
       failure: "A transferência falhou. Verifique que a inscrição de origem está paga e/ou confirmada e a de destino está pendente.\n\nInscrições canceladas não podem receber uma transferência. Uma nova inscrição precisa ser criada neste caso."
 
   footer:
-    help: "Se tiver dúvidas, críticas ou sugestões entre em contato através do email <a href='mailto:inscricoes@agilebrazil.com'>inscricoes@agilebrazil.com</a>"
+    help: "Se tiver dúvidas, críticas ou sugestões entre em contato através do email <a href='mailto:13forum@awid.org'>13forum@awid.org</a>"
 
   email:
     registration_pending:
@@ -317,14 +321,11 @@ pt:
     total: "Total"
 
   registration_type:
-    group: "Empresa"
-    individual: "Individual"
-    free: "Gratuita"
-    manual: "Manual"
+    member: "Membro"
+    non_member: "Não Membro"
     speaker: "Palestrante"
-    sponsor: "Patrocinador"
-    organizer: "Organizador"
-    guest: "Convidado"
+    volunteer: "Voluntário"
+    day_pass: "Passe para um dia"
 
   registration:
     quantity: "Quantidade"

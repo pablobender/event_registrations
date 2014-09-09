@@ -8,7 +8,7 @@ class EventAttendancesController < InheritedResources::Base
   
   before_filter :event
   before_filter :load_registration_types, only: [:new, :create]
-  before_filter :validate_free_registration, :only => [:create]
+  before_filter :validate_registration_type, :only => [:create]
 
   def index
     index! do |format|
@@ -53,10 +53,6 @@ class EventAttendancesController < InheritedResources::Base
     end
     attributes[:event_id] = event.id
     attributes[:user_id] = current_user.id
-    if parent?
-      attributes[:registration_type_id] = event.registration_types.find_by_title('registration_type.group').try(:id)
-      attributes[:organization] = parent.name
-    end
     if current_user.has_approved_session?(event)
       attributes[:registration_type_id] = event.registration_types.find_by_title('registration_type.speaker').try(:id)
     end
@@ -76,26 +72,26 @@ class EventAttendancesController < InheritedResources::Base
   end
 
   def valid_registration_types
-    registration_types = event.registration_types.paid.without_group.all
-    registration_types << event.registration_types.without_group.all if current_user.organizer?
+    registration_types = event.registration_types.all
     registration_types.flatten.uniq.compact
   end
     
-  def validate_free_registration
-    if is_free?(build_resource) && !allowed_free_registration?
-      build_resource.errors[:registration_type_id] << t('activerecord.errors.models.attendance.attributes.registration_type_id.free_not_allowed')
-      flash.now[:error] = t('flash.attendance.create.free_not_allowed') 
+  def validate_registration_type
+    attendance = build_resource
+    if attendance.member? && !current_user.is_member?
+      build_resource.errors[:registration_type_id] << t('activerecord.errors.models.attendance.attributes.registration_type_id.member_not_allowed')
+      flash.now[:error] = t('flash.attendance.create.member_not_allowed')
+      render :new and return false
+    elsif attendance.speaker? && !current_user.has_approved_session?(event)
+      build_resource.errors[:registration_type_id] << t('activerecord.errors.models.attendance.attributes.registration_type_id.speaker_not_allowed')
+      flash.now[:error] = t('flash.attendance.create.speaker_not_allowed')
+      render :new and return false
+    elsif attendance.volunteer? && !current_user.volunteer?
+      build_resource.errors[:registration_type_id] << t('activerecord.errors.models.attendance.attributes.registration_type_id.volunteer_not_allowed')
+      flash.now[:error] = t('flash.attendance.create.volunteer_not_allowed')
       render :new and return false
     end
     true
-  end
-  
-  def is_free?(attendance)
-    !event.registration_types.paid.include?(attendance.registration_type)
-  end
-  
-  def allowed_free_registration?
-    (current_user.has_approved_session?(event) || current_user.organizer?) && !parent?
   end
 
   def event

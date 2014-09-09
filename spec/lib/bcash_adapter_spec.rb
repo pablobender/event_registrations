@@ -5,7 +5,8 @@ require File.join(Rails.root, '/lib/bcash_adapter.rb')
 describe BcashAdapter do
   before(:each) do
     event = FactoryGirl.create(:event)
-    @attendance = FactoryGirl.create(:attendance, event: event, registration_date: event.registration_periods.first.start_at)
+    type = FactoryGirl.create(:registration_type, event: event, title: 'registration_type.member')
+      @attendance = FactoryGirl.create(:attendance, event: event, registration_type: type, registration_date: event.registration_periods.first.start_at)
     @attendance.stubs(:registration_fee).returns(399)
   end
 
@@ -16,7 +17,7 @@ describe BcashAdapter do
 
         adapter.items.size.should == 1
         adapter.items[0].amount.should == @attendance.registration_fee
-        adapter.items[0].name.should == "Type of Registration: Individual"
+        adapter.items[0].name.should == "Type of Registration: #{I18n.t('registration_type.member')}"
         adapter.items[0].quantity.should == 1
         adapter.items[0].number.should == @attendance.registration_type.id
       end

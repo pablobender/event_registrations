@@ -2,6 +2,7 @@
 require 'spec_helper'
 
 describe AttendanceHelper do
+  include ActionView::Helpers::NumberHelper
   describe "attendance_price for attendance and registration type" do
     it "should return attendance price" do
       attendance = FactoryGirl.build(:attendance, registration_date: Time.zone.local(2013, 03, 21))
@@ -20,7 +21,9 @@ describe AttendanceHelper do
       attendance.expects(:registration_fee).with(individual).returns(250)
       attendance.expects(:registration_fee).with(other).returns(400)
 
-      attendance_prices(attendance).should == {individual.id => "R$ 250,00", other.id => "R$ 400,00"}
+      expected_hash = { individual.id => number_to_currency(250, locale: :en),
+        other.id => number_to_currency(400, locale: :en)}
+      attendance_prices(attendance).should == expected_hash
     end
   end
 

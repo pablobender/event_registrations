@@ -5,7 +5,7 @@
     %h4 OPÇÃO 1: Pague com BCash
     %ol
       %li
-        Efetue o pagamento no valor de #{number_to_currency(attendance.registration_fee, locale: :pt)}:
+        Efetue o pagamento no valor de #{number_to_currency(attendance.registration_fee, locale: :en)}:
         %p
           = form_tag AppConfig[:bcash][:url] do
             - vars = build_bcash_variables(attendance, attendance_url(attendance, locale: 'pt'), payment_notifications_url(type: 'bcash', secret: AppConfig[:bcash][:secret]))
@@ -17,7 +17,7 @@
     %h4 OPÇÃO 2: Pague com PayPal
     %ol
       %li
-        Efetue o pagamento no valor de #{number_to_currency(attendance.registration_fee, locale: :pt)}:
+        Efetue o pagamento no valor de #{number_to_currency(attendance.registration_fee, locale: :en)}:
         %p
           = form_tag AppConfig[:paypal][:url] do
             = hidden_field_tag :cmd, "_s-xclick"

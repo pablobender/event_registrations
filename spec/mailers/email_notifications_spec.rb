@@ -6,7 +6,7 @@ describe EmailNotifications do
     ActionMailer::Base.deliveries = []
     @old_locale = I18n.locale
     I18n.locale = :en
-    @event = Event.last || FactoryGirl.build(:event)
+    @event = FactoryGirl.build(:event)
     Attendance.any_instance.stubs(:registration_fee).returns(499)
   end
 
@@ -17,7 +17,8 @@ describe EmailNotifications do
   
   context "registration pending" do
     before(:each) do
-      @attendance = FactoryGirl.build(:attendance, event: @event)
+      registration_type = FactoryGirl.build(:registration_type, event: @event)
+      @attendance = FactoryGirl.build(:attendance, event: @event, registration_type: registration_type)
       @attendance.id = 435
     end
     
@@ -27,7 +28,7 @@ describe EmailNotifications do
       mail.to.should == [@attendance.email]
       mail.cc.should == [AppConfig[:organizer][:email], AppConfig[:organizer][:cced_email]]
       mail.encoded.should =~ /Caro #{@attendance.full_name},/
-      mail.encoded.should =~ /R\$ 499,00/
+      mail.encoded.should =~ /\$499.00/
       mail.encoded.should =~ /#{AppConfig[:organizer][:contact_email]}/
       mail.subject.should == "[localhost:3000] Pedido de inscrição na #{@event.name} enviado"
     end
@@ -39,7 +40,7 @@ describe EmailNotifications do
       mail.to.should == [@attendance.email]
       mail.cc.should == [AppConfig[:organizer][:email], AppConfig[:organizer][:cced_email]]
       mail.encoded.should =~ /Dear #{@attendance.full_name},/
-      mail.encoded.should =~ /R\$ 499,00/
+      mail.encoded.should =~ /\$499.00/
       mail.encoded.should =~ /#{AppConfig[:organizer][:contact_email]}/
       mail.subject.should == "[localhost:3000] Registration request to #{@event.name} sent"
     end

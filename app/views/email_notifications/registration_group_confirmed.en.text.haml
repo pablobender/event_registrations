@@ -1,10 +1,10 @@
 Dear #{h(@registration_group.contact_name)},
 
 
-The registration of company <strong>#{h(@registration_group.name)}</strong> priced #{number_to_currency(@registration_group.registration_fee, :locale => :pt)} at #{@event_name} was confirmed successfully. The registration includes:
+The registration of company <strong>#{h(@registration_group.name)}</strong> priced #{number_to_currency(@registration_group.registration_fee, :locale => :en)} at #{@event_name} was confirmed successfully. The registration includes:
 
 - @registration_group.attendees.each do |attendee|
-  #{"-"} #{h(attendee.full_name)} priced #{number_to_currency(attendee.registration_fee, :locale => :pt)}
+  #{"-"} #{h(attendee.full_name)} priced #{number_to_currency(attendee.registration_fee, :locale => :en)}
 
 If you have any questions, please contact us at #{mail_to AppConfig[:organizer][:contact_email]}
 

@@ -5,7 +5,7 @@ module AttendanceHelper
 
   def attendance_prices(attendance)
     attendance.event.registration_types.map do |registration_type|
-      {registration_type.id => number_to_currency(attendance_price(attendance, registration_type), :locale => :pt)}
+      {registration_type.id => number_to_currency(attendance_price(attendance, registration_type), :locale => :en)}
     end.inject({}, :merge)
   end
 

@@ -40,31 +40,13 @@ describe EventAttendancesController do
       assigns(:attendance).event.should == @event
     end
 
-    describe "for individual registration" do
-      it "should load registration types without groups or free" do
-        get :new, event_id: @event.id
-        assigns(:registration_types).should include(@individual)
-        assigns(:registration_types).size.should == 1
-      end
-    end
-
-    describe "for organizers" do
-      before do
-        @user = FactoryGirl.create(:user)
-        @user.add_role :organizer
-        @user.save!
-        sign_in @user
-        disable_authorization
-      end
-
-      it "should load registration types without groups but with free" do
-        get :new, event_id: @event.id
-        assigns(:registration_types).should include(@individual)
-        assigns(:registration_types).should include(@free)
-        assigns(:registration_types).should include(@speaker)
-        assigns(:registration_types).should include(@manual)
-        assigns(:registration_types).size.should == 4
-      end
+    it "should load registration types" do
+      get :new, event_id: @event.id
+      assigns(:registration_types).should include(@individual)
+      assigns(:registration_types).should include(@free)
+      assigns(:registration_types).should include(@speaker)
+      assigns(:registration_types).should include(@manual)
+      assigns(:registration_types).size.should == 4
     end
   end
 
@@ -146,14 +128,6 @@ describe EventAttendancesController do
         Attendance.any_instance.stubs(:valid?).returns(true)
         EmailNotifications.expects(:registration_pending).returns(@email)
         post :create, event_id: @event.id, attendance: {registration_type_id: @individual.id}
-      end
-
-      it "should not allow free registration type" do
-        Attendance.any_instance.stubs(:valid?).returns(true)
-        controller.stubs(:valid_registration_types).returns([@individual, @manual])
-        post :create, event_id: @event.id, attendance: {registration_type_id: @free.id}
-        response.should render_template(:new)
-        flash[:error].should == I18n.t('flash.attendance.create.free_not_allowed')
       end
     end
 

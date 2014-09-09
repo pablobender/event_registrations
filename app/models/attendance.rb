@@ -11,7 +11,7 @@ class Attendance < ActiveRecord::Base
   attr_accessible :event_id, :user_id, :registration_type_id, :registration_group_id, :registration_date,
                   :first_name, :last_name, :email, :email_confirmation, :organization, :phone, :country,
                   :state, :city, :badge_name, :cpf, :gender, :twitter_user, :address, :neighbourhood,
-                  :zipcode, :notes
+                  :zipcode, :notes, :registration_fee
 
   attr_accessor :email_confirmation
 
@@ -99,6 +99,12 @@ class Attendance < ActiveRecord::Base
 
   def in_brazil?
     self.country == "BR"
+  end
+
+  RegistrationType.all_titles.each do |type|
+    define_method("#{type}?") do              # def member?
+      self.registration_type.try(:"#{type}?") #   self.registration_type.try(:member?)
+    end                                       # end
   end
 
   private

@@ -1,11 +1,12 @@
 #!/usr/bin/env ruby
 
 if ARGV.count < 2
-  puts %Q{Usage: #{File.basename(__FILE__)} <user> <target_machine> <optional_ssh_key>
+  puts %Q{Usage: #{File.basename(__FILE__)} <user> <target_machine> <optional_ssh_key> [<branch>]
 
 <user>: The user that will be used to ssh into the machine. Either root for Digital Ocean machines or ubuntu for AWS EC2 machines. It MUST have an ssh key already set up to ssh into.
 <target_machine>: The public DNS or public IP address of the machine to be deployed
 <optional_ssh_key>: The path to the ssh key to be used to log in with the specified user on the specified machine
+<branch>: The branch/SHA/Tag to deploy
   }
   exit(1)
 end
@@ -13,6 +14,7 @@ end
 @user = ARGV[0]
 @target = ARGV[1]
 @key_path = ARGV[2] if ARGV.size > 2
+@branch = ARGV[3] if ARGV.size > 3
 RAILS_ROOT = File.join(File.dirname(__FILE__), '..')
 REMOTE_SHARED_FOLDER = '/srv/apps/registrations/shared'
 
@@ -70,4 +72,4 @@ execute %Q{bundle exec cap #{@target} deploy:check:directories deploy:check:make
 files_to_upload.each do |file|
   execute %Q{scp #{key_param} #{tag_with_target(file)} #{@deployed_user}@#{@target}:#{REMOTE_SHARED_FOLDER}/#{file}}
 end
-execute %Q{bundle exec cap #{@target} deploy}
+execute %Q{bundle exec cap #{@target} deploy BRANCH_NAME=#{@branch}}
